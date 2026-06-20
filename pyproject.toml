@@ -7,5 +7,6 @@ requires-python = ">=3.14"
 dependencies = [
     "pgvector>=0.4.2",
     "psycopg[binary,pool]>=3.3.4",
+    "pydantic-settings>=2.14.2",
     "python-dotenv>=1.2.2",
 ]
