@@ -4,16 +4,12 @@ logger = logging.getLogger(__name__)
 
 
 class Embedder:
-    def __init__(self, model_name):
+    def __init__(self, model_name, openai_api_key=None):
         self._model_name = model_name
 
         if self._model_name == "text-embedding-3-large":
             from openai import OpenAI
-            from rag_searcher.config import settings
-            self._client = OpenAI(
-                api_key=settings.openai_api_key.get_secret_value(),
-                max_retries=5,
-            )
+            self._client = OpenAI(api_key=openai_api_key, max_retries=5)
             self._get_embedding = self._get_embedding_openai
 
         elif self._model_name == "sdadas/mmlw-retrieval-roberta-large-v2":
