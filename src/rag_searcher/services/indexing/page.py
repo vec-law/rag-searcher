@@ -6,6 +6,7 @@ from rag_searcher.db.queries.page import get_page as db_get_page
 from rag_searcher.db.queries.page import insert_page as db_insert_page
 from rag_searcher.db.queries.page import update_page_embedding_config as db_update_page_embedding_config
 from rag_searcher.db.queries.link import delete_expired_page_links as db_delete_expired_page_links
+from rag_searcher.db.queries.content import set_page_contents_pending as db_set_page_contents_pending
 
 def get_page() -> Page:
     url = settings.page_url
@@ -35,3 +36,6 @@ def get_page() -> Page:
 
 def delete_expired_page_links(page_id: int) -> None:
     db_delete_expired_page_links(page_id, settings.link_expiry_days)
+
+def set_page_contents_pending(page_id: int) -> None:
+    db_set_page_contents_pending(page_id)
