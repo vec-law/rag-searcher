@@ -2,18 +2,20 @@ import time
 import traceback
 
 from rag_searcher.db.pool import pool
-from rag_searcher.services.indexing.page import get_page, delete_expired_page_links, set_page_contents_pending
+from rag_searcher.services.indexing.page import setup_page, delete_expired_page_links, fetch_page_links, set_page_contents_pending
 
 
 def main():
     pool.open()
     try:
-        page = get_page()
+        page_id = setup_page()
 
         while True:
             try:
-                delete_expired_page_links(page.id)
-                set_page_contents_pending(page.id)
+                delete_expired_page_links(page_id)
+                fetch_page_links(page_id)
+                set_page_contents_pending(page_id)
+
             except Exception:
                 traceback.print_exc()
                 time.sleep(60)

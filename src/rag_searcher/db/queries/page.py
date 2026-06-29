@@ -2,12 +2,11 @@ from rag_searcher.db.pool import pool
 from rag_searcher.models.page import Page
 
 
-def get_page(url, page_type_id, page_max, fetcher_id):
+def get_page_id(url: str, page_type_id: int, page_max: int, fetcher_id: int) -> int | None:
     with pool.connection() as conn:
         row = conn.execute(
             """
-            SELECT id, url, page_type_id, page_max, fetcher_id,
-                   embedding_model_name, embedding_vector_size
+            SELECT id
             FROM page
             WHERE url = %s AND page_type_id = %s
               AND page_max = %s AND fetcher_id = %s
@@ -18,26 +17,25 @@ def get_page(url, page_type_id, page_max, fetcher_id):
     if row is None:
         return None
 
-    return Page(*row)
+    return row[0]
 
-def insert_page(url, page_type_id, page_max, fetcher_id,
-                embedding_model_name, embedding_vector_size):
+def insert_page(url: str, page_type_id: int, page_max: int, fetcher_id: int,
+                embedding_model_name: str, embedding_vector_size: int) -> int:
     with pool.connection() as conn:
         row = conn.execute(
             """
             INSERT INTO page (url, page_type_id, page_max, fetcher_id,
                               embedding_model_name, embedding_vector_size)
             VALUES (%s, %s, %s, %s, %s, %s)
-            RETURNING id, url, page_type_id, page_max, fetcher_id,
-                      embedding_model_name, embedding_vector_size
+            RETURNING id
             """,
             (url, page_type_id, page_max, fetcher_id,
              embedding_model_name, embedding_vector_size),
         ).fetchone()
 
-    return Page(*row)
+    return row[0]
 
-def update_page_embedding_config(page_id, embedding_model_name, embedding_vector_size):
+def update_page_embedding_config(embedding_model_name, embedding_vector_size):
     with pool.connection() as conn:
         with conn.transaction():
             conn.execute("DELETE FROM embedding")
@@ -54,13 +52,18 @@ def update_page_embedding_config(page_id, embedding_model_name, embedding_vector
                 (embedding_model_name, embedding_vector_size),
             )
 
-            row = conn.execute(
-                """
-                SELECT id, url, page_type_id, page_max, fetcher_id,
-                       embedding_model_name, embedding_vector_size
-                FROM page
-                WHERE id = %s
-                """,
-                (page_id,),
-            ).fetchone()
-    return Page(*row)
+def get_page_embedding_config(page_id: int) -> tuple[str, int]:
+    with pool.connection() as conn:
+        row = conn.execute(
+            """
+            SELECT embedding_model_name, embedding_vector_size
+            FROM page
+            WHERE id = %s
+            """,
+            (page_id,),
+        ).fetchone()
+
+    if row is None:
+        raise ValueError(f"Brak page o id: {page_id}")
+
+    return row
