@@ -1,7 +1,7 @@
 # rag-searcher
 
-**PL:** W trakcie...
+**PL:** W trakcie refaktoryzacji
 
 ---
 
-**EN:** In progress...
+**EN:** Refactoring in progress
