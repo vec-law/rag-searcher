@@ -64,3 +64,14 @@ def update_page_embedding_config(page_id, embedding_model_name, embedding_vector
                 (page_id,),
             ).fetchone()
     return Page(*row)
+
+def delete_expired_page_links(page_id, expiry_days):
+    with pool.connection() as conn:
+        conn.execute(
+            """
+            DELETE FROM link
+            WHERE page_id = %s
+              AND created_at < NOW() - INTERVAL '1 day' * %s
+            """,
+            (page_id, expiry_days),
+        )
