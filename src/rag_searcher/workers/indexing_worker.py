@@ -1,5 +1,5 @@
 from rag_searcher.db.pool import pool
-from rag_searcher.services.indexing.page_config import get_page
+from rag_searcher.services.indexing.page import get_page
 
 
 def main():
