@@ -1,5 +1,4 @@
 from rag_searcher.db.pool import pool
-from rag_searcher.models.page import Page
 
 
 def get_page_id(url: str, page_type_id: int, page_max: int, fetcher_id: int) -> int | None:
