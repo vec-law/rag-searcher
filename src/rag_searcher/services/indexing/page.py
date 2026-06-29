@@ -5,7 +5,7 @@ from rag_searcher.db.queries.fetcher import get_fetcher_id as db_get_fetcher_id
 from rag_searcher.db.queries.page import get_page as db_get_page
 from rag_searcher.db.queries.page import insert_page as db_insert_page
 from rag_searcher.db.queries.page import update_page_embedding_config as db_update_page_embedding_config
-from rag_searcher.db.queries.page import delete_expired_page_links as db_delete_expired_page_links
+from rag_searcher.db.queries.link import delete_expired_page_links as db_delete_expired_page_links
 
 def get_page() -> Page:
     url = settings.page_url
