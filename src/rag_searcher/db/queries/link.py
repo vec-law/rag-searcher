@@ -1,7 +1,7 @@
 from rag_searcher.db.pool import pool
 
 
-def delete_expired_page_links(page_id, expiry_days):
+def delete_expired_page_links(page_id: int, expiry_days: int) -> None:
     with pool.connection() as conn:
         conn.execute(
             """

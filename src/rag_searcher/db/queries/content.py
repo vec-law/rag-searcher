@@ -1,7 +1,7 @@
 from rag_searcher.db.pool import pool
 
 
-def set_page_contents_pending(page_id):
+def set_page_contents_pending(page_id: int) -> None:
     with pool.connection() as conn:
         with conn.transaction():
             conn.execute(
