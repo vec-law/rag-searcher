@@ -13,8 +13,10 @@ from rag_searcher.db.queries.link import (
     delete_expired_page_links as db_delete_expired_page_links,
     save_links as db_save_links,
 )
-from rag_searcher.db.queries.content import set_page_contents_pending as db_set_page_contents_pending
-
+from rag_searcher.db.queries.content import (
+    set_page_contents_pending as db_set_page_contents_pending,
+    get_page_content_ids as db_get_page_content_ids,
+)
 from rag_searcher.services.indexing.link import fetch_links_from_paginated
 
 
@@ -69,3 +71,6 @@ def fetch_page_links(page_id: int) -> None:
 
 def set_page_contents_pending(page_id: int) -> None:
     db_set_page_contents_pending(page_id)
+
+def get_page_content_ids(page_id: int) -> list[int]:
+    return db_get_page_content_ids(page_id)

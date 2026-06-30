@@ -2,7 +2,10 @@ import time
 import logging
 
 from rag_searcher.db.pool import pool
-from rag_searcher.services.indexing.page import setup_page, delete_expired_page_links, fetch_page_links, set_page_contents_pending
+from rag_searcher.services.indexing.page import (
+    setup_page, delete_expired_page_links, fetch_page_links,
+    set_page_contents_pending, get_page_content_ids,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +21,8 @@ def main():
                 delete_expired_page_links(page_id)
                 fetch_page_links(page_id)
                 set_page_contents_pending(page_id)
+
+                content_ids = get_page_content_ids(page_id)
 
             except Exception:
                 logger.exception("Błąd w pętli indeksacyjnej")

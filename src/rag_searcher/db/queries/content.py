@@ -37,3 +37,18 @@ def set_page_contents_pending(page_id: int) -> None:
                 """,
                 (page_id,),
             )
+
+def get_page_content_ids(page_id: int) -> list[int]:
+    with pool.connection() as conn:
+        rows = conn.execute(
+            """
+            SELECT c.id
+            FROM content c
+            JOIN link l ON l.id = c.link_id
+            WHERE l.page_id = %s
+              AND c.status_id = (SELECT id FROM status WHERE name = 'pending')
+            """,
+            (page_id,),
+        ).fetchall()
+
+    return [row[0] for row in rows]
