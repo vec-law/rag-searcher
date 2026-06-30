@@ -34,7 +34,10 @@ def insert_page(url: str, page_type_id: int, page_max: int, fetcher_id: int,
 
     return row[0]
 
-def update_page_embedding_config(embedding_model_name, embedding_vector_size):
+def update_page_embedding_config(
+    embedding_model_name: str,
+    embedding_vector_size: int
+) -> None:
     with pool.connection() as conn:
         with conn.transaction():
             conn.execute("DELETE FROM embedding")
@@ -58,6 +61,24 @@ def get_page_embedding_config(page_id: int) -> tuple[str, int]:
             SELECT embedding_model_name, embedding_vector_size
             FROM page
             WHERE id = %s
+            """,
+            (page_id,),
+        ).fetchone()
+
+    if row is None:
+        raise ValueError(f"Brak page o id: {page_id}")
+
+    return row
+
+def get_page_settings(page_id: int) -> tuple[str, int, str, str]:
+    with pool.connection() as conn:
+        row = conn.execute(
+            """
+            SELECT p.url, p.page_max, pt.name, f.name
+            FROM page p
+            JOIN page_type pt ON pt.id = p.page_type_id
+            JOIN fetcher f ON f.id = p.fetcher_id
+            WHERE p.id = %s
             """,
             (page_id,),
         ).fetchone()

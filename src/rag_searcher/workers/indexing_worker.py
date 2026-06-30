@@ -1,11 +1,14 @@
 import time
-import traceback
+import logging
 
 from rag_searcher.db.pool import pool
 from rag_searcher.services.indexing.page import setup_page, delete_expired_page_links, fetch_page_links, set_page_contents_pending
 
+logger = logging.getLogger(__name__)
+
 
 def main():
+    logging.basicConfig(level=logging.INFO)
     pool.open()
     try:
         page_id = setup_page()
@@ -17,7 +20,7 @@ def main():
                 set_page_contents_pending(page_id)
 
             except Exception:
-                traceback.print_exc()
+                logger.exception("Błąd w pętli indeksacyjnej")
                 time.sleep(60)
                 continue
 

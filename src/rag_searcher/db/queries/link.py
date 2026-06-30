@@ -11,3 +11,16 @@ def delete_expired_page_links(page_id: int, expiry_days: int) -> None:
             """,
             (page_id, expiry_days),
         )
+
+def save_links(page_id: int, links_dict: dict[str, str]) -> None:
+    rows = [(url, title, page_id) for url, title in links_dict.items()]
+    with pool.connection() as conn:
+        with conn.cursor() as cur:
+            cur.executemany(
+                """
+                INSERT INTO link (url, title, page_id)
+                VALUES (%s, %s, %s)
+                ON CONFLICT (page_id, url) DO NOTHING
+                """,
+                rows,
+            )
