@@ -52,3 +52,34 @@ def get_page_content_ids(page_id: int) -> list[int]:
         ).fetchall()
 
     return [row[0] for row in rows]
+
+def get_content_params(content_id: int) -> tuple[str, str]:
+    with pool.connection() as conn:
+        row = conn.execute(
+            """
+            SELECT f.name, l.url
+            FROM content c
+            JOIN link l ON l.id = c.link_id
+            JOIN page p ON p.id = l.page_id
+            JOIN fetcher f ON f.id = p.fetcher_id
+            WHERE c.id = %s
+            """,
+            (content_id,),
+        ).fetchone()
+
+    if row is None:
+        raise ValueError(f"Brak content o id: {content_id}")
+
+    return row
+
+def update_content(content_id: int, content: str | None, status: str) -> None:
+    with pool.connection() as conn:
+        conn.execute(
+            """
+            UPDATE content
+            SET content = %s,
+                status_id = (SELECT id FROM status WHERE name = %s)
+            WHERE id = %s
+            """,
+            (content, status, content_id),
+        )

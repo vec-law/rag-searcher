@@ -1,11 +1,13 @@
 import time
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 from rag_searcher.db.pool import pool
 from rag_searcher.services.indexing.page import (
     setup_page, delete_expired_page_links, fetch_page_links,
     set_page_contents_pending, get_page_content_ids,
 )
+from rag_searcher.services.indexing.content import fetch_content
 
 logger = logging.getLogger(__name__)
 
@@ -23,9 +25,11 @@ def main():
                 set_page_contents_pending(page_id)
 
                 content_ids = get_page_content_ids(page_id)
+                with ThreadPoolExecutor(max_workers=2) as executor:
+                    executor.map(fetch_content, content_ids)
 
             except Exception:
-                logger.exception("Błąd w pętli indeksacyjnej")
+                logger.exception("Błąd w pętli indeksującej")
                 time.sleep(60)
                 continue
 
