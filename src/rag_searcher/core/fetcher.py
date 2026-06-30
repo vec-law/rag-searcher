@@ -21,5 +21,5 @@ def _fetch_curl(url: str) -> tuple[str, int]:
         "Sec-Fetch-Site": "none",
         "Sec-Fetch-User": "?1",
     }
-    response = requests.get(url, impersonate="chrome", headers=headers)
+    response = requests.get(url, impersonate="chrome", headers=headers, timeout=30)
     return response.text, response.status_code
