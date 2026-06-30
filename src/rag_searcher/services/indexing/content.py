@@ -1,10 +1,13 @@
 import time
+import logging
 
 from rag_searcher.core.fetcher import fetch_url
 from rag_searcher.db.queries.content import (
     get_content_params as db_get_content_params,
     update_content as db_update_content,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def fetch_content(content_id: int) -> None:
@@ -18,6 +21,7 @@ def fetch_content(content_id: int) -> None:
         return
 
     content, status_code = fetch_url(content_url, fetcher_name)
+    logger.info("[content_id: %s, status: %s] %s", content_id, status_code, content_url[:80])
 
     if status_code != 200 or not content:
         db_update_content(content_id, None, "failed")
