@@ -19,7 +19,7 @@ def fetch_links_from_paginated(url, page_max, fetcher_name):
     for i in range(1, page_max + 1):
         page_url = url.replace("{page_number}", str(i))
         content, status_code = fetch_url(page_url, fetcher_name)
-        logger.info("[page: %s, status: %s] %s", i, status_code, page_url[:80])
+        logger.info("[page: %s, status: %s] %s", i, status_code, page_url[:50])
 
         if status_code != 200:
             break
