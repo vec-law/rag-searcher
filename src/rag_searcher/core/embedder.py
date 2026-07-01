@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 
 class Embedder:
-    def __init__(self, model_name, openai_api_key=None):
+    def __init__(self, model_name, openai_api_key=None, hf_token=None):
         self._model_name = model_name
 
         if self._model_name == "text-embedding-3-large":
@@ -14,7 +14,7 @@ class Embedder:
 
         elif self._model_name == "sdadas/mmlw-retrieval-roberta-large-v2":
             from sentence_transformers import SentenceTransformer
-            self._model = SentenceTransformer(self._model_name)
+            self._model = SentenceTransformer(self._model_name, token=hf_token)
             self._compute_embedding = self._compute_embedding_roberta
 
         else:
