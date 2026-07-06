@@ -9,10 +9,6 @@ from rag_searcher.db.queries.content import (
     set_page_contents_pending as db_set_page_contents_pending,
     get_page_content_ids as db_get_page_content_ids,
 )
-from rag_searcher.db.queries.embedding import (
-    set_page_embeddings_pending as db_set_page_embeddings_pending,
-    get_embedding_ids as db_get_embedding_ids,
-)
 from rag_searcher.services.indexing.link import fetch_links_from_paginated
 
 
@@ -37,9 +33,3 @@ def set_page_contents_pending(page_id: int) -> None:
 
 def get_page_content_ids(page_id: int) -> list[int]:
     return db_get_page_content_ids(page_id)
-
-def set_page_embeddings_pending(page_id: int) -> None:
-    db_set_page_embeddings_pending(page_id)
-
-def get_page_embedding_ids(page_id: int) -> list[int]:
-    return db_get_embedding_ids(page_id)
