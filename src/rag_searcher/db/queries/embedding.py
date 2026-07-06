@@ -192,3 +192,11 @@ def get_embedding_context(embedding_id: int, embedding_config_id: int) -> dict |
         return None
 
     return {"url": row[0], "title": row[1], "content": row[2], "status": row[3]}
+
+def get_similar_embedding_ids(
+        query_embedding: list[float],
+        limit: int | None,
+        page_id: int,
+        embedding_config_id: int
+) -> list[int]:
+    pass
