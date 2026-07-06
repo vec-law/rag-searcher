@@ -199,4 +199,23 @@ def get_similar_embedding_ids(
         page_id: int,
         embedding_config_id: int
 ) -> list[int]:
-    pass
+    table_name = f"embedding_{embedding_config_id}"
+    embedding_str = "[" + ",".join(map(str, query_embedding)) + "]"
+
+    with pool.connection() as conn:
+        rows = conn.execute(
+            f"""
+            SELECT e.id
+            FROM {table_name} e
+            JOIN content c ON c.id = e.content_id
+            JOIN link l ON l.id = c.link_id
+            WHERE l.page_id = %s
+              AND e.status_id = (SELECT id FROM status WHERE name = 'completed')
+              AND c.status_id = (SELECT id FROM status WHERE name = 'completed')
+            ORDER BY e.embedding <=> %s::vector
+            LIMIT %s
+            """,
+            (page_id, embedding_str, limit),
+        ).fetchall()
+
+    return [row[0] for row in rows]
