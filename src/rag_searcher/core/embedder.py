@@ -9,11 +9,16 @@ class Embedder:
 
         if self._model_name == "text-embedding-3-large":
             from openai import OpenAI
+            
             self._client = OpenAI(api_key=openai_api_key, max_retries=5)
             self._embed = self._embed_openai
 
         elif self._model_name == "sdadas/mmlw-retrieval-roberta-large-v2":
+            from huggingface_hub.utils import disable_progress_bars
+            disable_progress_bars()
+
             from sentence_transformers import SentenceTransformer
+
             self._model = SentenceTransformer(self._model_name, token=hf_token)
             self._embed = self._embed_roberta
 
