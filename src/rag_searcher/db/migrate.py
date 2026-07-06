@@ -5,7 +5,7 @@ import psycopg
 from rag_searcher.config import settings
 
 
-def migrate():
+def migrate() -> None:
     conn = psycopg.connect(
         host=settings.db_host,
         port=settings.db_port,
