@@ -2,17 +2,20 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from rag_searcher.db.pool import pool
 from rag_searcher.config import settings
 from rag_searcher.db.queries.page import get_page_id as db_get_page_id
 from rag_searcher.db.queries.embedding import get_embedding_config_id as db_get_embedding_config_id
 from rag_searcher.db.queries.page_type import get_page_type_id as db_get_page_type_id
 from rag_searcher.db.queries.fetcher import get_fetcher_id as db_get_fetcher_id
 from rag_searcher.services.embedder import get_embed
-from rag_searcher.api.routers.search import router as search_router
+from rag_searcher.api.routers import search
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    pool.open()
+
     page_type_id = db_get_page_type_id(settings.page_type)
     fetcher_id = db_get_fetcher_id(settings.fetcher_name)
 
@@ -40,6 +43,8 @@ async def lifespan(app: FastAPI):
 
     yield
 
+    pool.close()
+
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(search_router)
+app.include_router(search.router)

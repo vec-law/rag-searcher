@@ -32,9 +32,8 @@ def search_endpoint(
 
     results = [
         {
-            "url": context["url"],
             "title": context["title"],
-            "content": context["content"]
+            "url": context["url"]
         } for embedding_id in embedding_ids
 
         if (context := db_get_embedding_context(
