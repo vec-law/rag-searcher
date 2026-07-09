@@ -14,6 +14,11 @@ class Embedder:
             self._embed = self._embed_openai
 
         elif self._model_name == "sdadas/mmlw-retrieval-roberta-large-v2":
+            logger.info("Rozpoczęto ładowanie modelu: %s", self._model_name)
+
+            import warnings
+            warnings.filterwarnings("ignore", module="huggingface_hub")
+
             from huggingface_hub.utils import disable_progress_bars
             disable_progress_bars()
 
@@ -21,6 +26,8 @@ class Embedder:
 
             self._model = SentenceTransformer(self._model_name, token=hf_token)
             self._embed = self._embed_roberta
+
+            logger.info("Zakończono ładowanie modelu: %s", self._model_name)
 
         else:
             raise NotImplementedError(f"Brak implementacji dla modelu: {self._model_name}. Dodaj implementację do embedder.py.")
@@ -47,4 +54,3 @@ class Embedder:
         except Exception as e:
             logger.error("Błąd embeddera: %s", e)
             raise
-
