@@ -15,11 +15,14 @@ from rag_searcher.services.indexing.embedding import (
 )
 from rag_searcher.services.embedder import get_embed
 
+logging.basicConfig(level=logging.WARNING)
+logging.getLogger("rag_searcher").setLevel(logging.INFO)
+logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+logging.getLogger("huggingface_hub.utils._http").setLevel(logging.ERROR)
+
 logger = logging.getLogger(__name__)
 
-
 def main():
-    logging.basicConfig(level=logging.INFO)
     pool.open()
     try:
         page_id, embedding_config_id = init()
