@@ -9,6 +9,7 @@ dependencies = [
     "bs4>=0.0.2",
     "curl-cffi>=0.15.0",
     "fastapi>=0.139.0",
+    "llama-cpp-python",
     "openai>=2.44.0",
     "pgvector>=0.4.2",
     "psycopg-pool>=3.3.1",
@@ -16,6 +17,13 @@ dependencies = [
     "pydantic-settings>=2.14.2",
     "python-dotenv>=1.2.2",
     "sentence-transformers>=5.6.0",
+    "sentencepiece>=0.2.1",
     "trafilatura>=2.1.0",
     "uvicorn>=0.50.2",
 ]
+
+[[tool.uv.index]]
+url = "https://abetlen.github.io/llama-cpp-python/whl/cpu"
+
+[tool.uv.sources]
+llama-cpp-python = { git = "https://github.com/JamePeng/llama-cpp-python.git" }
