@@ -33,9 +33,9 @@ class LLM:
                     repo_id=self._model_name,
                     filename="*Q4_K_M*.gguf",
                     verbose=False,
-                    token=hf_token
+                    token=hf_token,
+                    n_ctx=8192
                 )
-
             self._respond = self._respond_gemma_llamacpp
 
             logger.info("Zakończono ładowanie modelu: %s", self._model_name)
