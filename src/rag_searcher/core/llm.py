@@ -8,9 +8,13 @@ class LLM:
         self._model_name = model_name
 
         if self._model_name == "gpt-4o":
+            logger.info("Rozpoczęto inicjalizację klienta: %s", self._model_name)
+
             from openai import OpenAI
             self._client = OpenAI(api_key=openai_api_key, max_retries=5)
             self._respond = self._respond_openai
+
+            logger.info("Zakończono inicjalizację klienta: %s", self._model_name)
 
         elif self._model_name in ("unsloth/gemma-4-E2B-it-GGUF", "unsloth/gemma-4-E4B-it-GGUF", "unsloth/gemma-4-12b-it-GGUF"):
             logger.info("Rozpoczęto ładowanie modelu: %s", self._model_name)
