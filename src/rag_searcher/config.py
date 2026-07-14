@@ -19,10 +19,7 @@ class Settings(BaseSettings):
     embedding_model_name: str
     embedding_vector_size: int
 
-    semantic_search_limit: int
-
     llm_name: str
-    rag_limit: int
 
     hf_token: SecretStr | None = None
     openai_api_key: SecretStr | None = None
