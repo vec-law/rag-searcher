@@ -12,6 +12,7 @@ from rag_searcher.db.queries.fetcher import get_fetcher_id as db_get_fetcher_id
 from rag_searcher.services.embedder import get_embed
 from rag_searcher.services.llm import get_respond
 from rag_searcher.api.routers import search
+from rag_searcher.api.routers import chat
 
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("rag_searcher").setLevel(logging.INFO)
@@ -71,3 +72,4 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(search.router)
+app.include_router(chat.router)
