@@ -122,7 +122,7 @@ def handle_search(respond, embed, domain, page_id, embedding_config_id, sources_
         for i, m in enumerate(matches, start=1)
     ]
 
-    answer = "\n\nZnalazłem następujące wyniki:\n\n" + "\n".join(lines) + "\n"
+    answer = "\n\nZnalazłem następujące wyniki:\n\n" + "\n\n".join(lines) + "\n"
 
     return answer
 
